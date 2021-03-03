@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>동작구 청소행정</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/admin/apsol-base.css}">
+</head>
+<body>
+<div class="apsol-base base-container">
+    <div th:replace="/admin/fragment/category.html :: admin-category"></div>
+    <div th:replace="/admin/fragment/menu.html :: admin-menu"></div>
+    <div class="apsol-base base-wrapper">
+        <div th:replace="/admin/fragment/header.html :: admin-header"></div>
+        <div class="apsol-base base-content">
+
+
+
+
+
+        </div>
+        <div th:replace="/admin/fragment/toolbar.html :: admin-toolbar"></div>
+    </div>
+</div>
+</body>
+</html>

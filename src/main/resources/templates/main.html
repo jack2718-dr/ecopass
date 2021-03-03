@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동작구청 대형 생활폐기물 배출신고</title>
+
+    <link th:href="@{/common/css/client.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/common/css/common.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+   <div class="clientBody">
+      
+       <div class="headerBox">
+            <div class="headerInner">
+                <div class="headerLogo">
+                   <a class="headerLogoHref">
+                    <img class="comImgH" src="/common/img/dong-jak/logo_01.png">
+                    </a>
+                </div>
+                
+                <div class="moIcon">
+                    <div class="moIconUnit"></div>
+                    <div class="moIconUnit"></div>
+                    <div class="moIconUnit"></div>
+                </div>
+                
+                <div class="headerMenuList">
+                    <a class="headerMenu">이용안내</a>
+                    <a class="headerMenu headerPoint">온라인 신청</a>
+                </div>
+            </div>
+       </div>
+
+       <div class="clientContent">
+            <div class="mainBannerBox">
+                <div class="mainBannerInner">
+                   
+                    <div class="mainBannerTextBox">
+                        <div class="mainBannerTextInner">
+                            <div class="mainBannerTextUnit">
+                                 <b class="mainBannerText">
+                                     <b class="bold">대형 생활폐기물</b>
+                                     <b class="bold subColor">배출신고</b><br>
+                                     
+                                     <b class="">핸드폰으로 간편하게</b><br>
+                                     <b>신청하세요!</b>
+                                 </b>
+                                 
+                                 <a class="bannerBtnBox bannerFullBtn">배출신청하기</a>
+                                 <a class="bannerBtnBox">신청 결과조회</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mainBannerImgBox">
+                        <div class="mainBanner">
+                            <div class="mainBannerImg">
+                                <img class="comImgH" src="/common/img/dong-jak/bannerPC.png">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mainBannerSubImgBox subBanner_01">
+                        <div class="mainBannerSub_01">
+                            <div class="mainBannerImg_01 hide579">
+                                <img class="comImgH" src="/common/img/dong-jak/bannerPhone.png">
+                            </div>
+                            
+                            <div class="mainBannerImg_01 show579">
+                                <img class="comImgH" src="/common/img/dong-jak/bannerPhoneMO_03.png">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mainBannerSubImgBox subBanner_02">
+                        <div class="mainBannerSub_02">
+                           <div class="mainBannerSubCopyBox">
+                                <p class="mainBannerSubCopy bold">대형 생활폐기물이란?</p>
+                                <p class="mainBannerSubCopy">생활폐기물 중 쓰레기 봉투에 담기 어려운 폐기물
+(예) 장롱, 문갑, 책상, 침대. 쇼파 등 가구류, 카폐트,
+액자, 자전거 등 기타류</p>
+                            </div>
+                            <div class="mainBannerImg_02 hide579">
+                                <img class="comImg" src="/common/img/dong-jak/bannerCar.png">
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="contentInner">
+                <div class="mainBtnBox">
+                    <div class="mainBtnList">
+                       
+                        <div class="mainBtnUnit">
+                            <p class="mainBtnText">대형 생황폐기물<br>배출신청</p>
+                            <div class="mainBtnIcon">
+                                <img class="comImgH" src="/common/img/dong-jak/mainSubIcon_01.png">
+                            </div>
+                        </div>
+                        
+                        <div class="mainBtnUnit">
+                            <p class="mainBtnText">종량제/PP마대<br>판매소</p>
+                            <div class="mainBtnIcon">
+                                <img class="comImgH" src="/common/img/dong-jak/mainSubIcon_02.png">
+                            </div>
+                        </div>
+                        
+                        <div class="mainBtnUnit">
+                            <p class="mainBtnText">수거차량<br>실시간위치</p>
+                            <div class="mainBtnIcon">
+                                <img class="comImgH" src="/common/img/dong-jak/mainSubIcon_03.png">
+                            </div>
+                        </div>
+                        
+                        <div class="mainBtnUnit">
+                            <p class="mainBtnText">대행업체<br>연락처</p>
+                            <div class="mainBtnIcon">
+                                <img class="comImgH" src="/common/img/dong-jak/mainSubIcon_04.png">
+                            </div>
+                        </div>
+                        
+                        <div class="mainBtnUnit">
+                            <p class="mainBtnText">수수료안내</p>
+                            <div class="mainBtnIcon">
+                                <img class="comImgH" src="/common/img/dong-jak/mainSubIcon_05.png">
+                            </div>
+                        </div>
+                        
+                        <div class="mainBtnUnit">
+                            <p class="mainBtnText">폐가전무상방문<br>수거서비스</p>
+                            <div class="mainBtnIcon">
+                                <img class="comImgH" src="/common/img/dong-jak/mainSubIcon_06.png">
+                            </div>
+                        </div>
+                        
+                    </div>    
+                </div>
+            </div>
+            
+       </div>
+       
+       <div class="footerBox">
+           <div class="footerInner">
+               <div class="footerLogo">
+                   <img class="comImg" src="/common/img/dong-jak/logo_02.png">
+               </div>
+               
+               <div class="footerInfoBox">
+                   <a class="footerInfo">개인정보처리방침</a>
+                   <a class="footerInfo">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
+                   <a class="footerInfo">02565 서울시 동대문구 천호대로 145(용두동) 동대문구청 3층 청소행정과</a>
+                   <a class="footerInfo">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
+                   <a class="footerInfo">대표번호 : 02-2127-4620</a>
+                   <a class="footerInfo">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
+                   <a class="footerInfo">팩스번호 : 02-3299-2629</a>
+
+                   <br>
+                   <a class="footerInfo">161, Jangseungbaegi-ro, Dongjak-gu, Seoul, Republic of Korea</a>
+               </div>
+               
+               <p class="footerCopy">Copyright© 2021 DONGJAK-GU all rights reserved.</p>
+           </div>
+       </div>
+       
+   </div>
+    
+</body>
+</html>

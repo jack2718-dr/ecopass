@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>동작구 청소행정</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/admin/apsol-base.css}">
+
+<!--    <th:block th:replace="config/csrf :: csrfConfig"/>-->
+    <th:block th:replace="config/jquery :: jqueryConfig"/>
+    <th:block th:replace="config/toast-ui :: toastUiConfig"/>
+
+    <script th:src="@{/common/js/common.js}"></script>
+</head>
+<body>
+    <div class="apsol-base base-container">
+        <div th:replace="/admin/fragment/category.html :: admin-category"></div>
+        <div th:replace="/admin/fragment/menu.html :: admin-menu"></div>
+        <div class="apsol-base base-wrapper">
+            <div th:replace="/admin/fragment/header.html :: admin-header"></div>
+            <div class="apsol-base base-content">
+
+                <div>
+                    <input id="orderNo" />
+                    <input id="name" />
+                    <input id="phone" />
+                    <button onclick="search();" > </button>
+                </div>
+<div id="listGrid"></div>
+
+            </div>
+            <div th:replace="/admin/fragment/toolbar.html :: admin-toolbar"></div>
+        </div>
+    </div>
+</body>
+
+
+<script th:inline="javascript">
+
+    var searchOptions = [[${searchOptions}]];
+
+    var listGridDataSource = "/admin/bulky/list/read"
+
+    var listGrid = new tui.Grid({
+        el: document.getElementById('listGrid'),
+        data: {
+            initialRequest: true, // 초기화시 요청
+            api: {
+                readData: { url: listGridDataSource, method: 'GET', initParams: searchOptions }
+            }
+        },
+        pageOptions: {
+            perPage: 20, // 페이지당 row 개수
+            useClient: false, // 클라이언트 페이지네이션
+        },
+        treeColumnOptions: {
+            name: 'orderNo',
+        },
+        columns: [
+            { header: '주문번호', name: 'orderNo' },
+            { header: '이름', name: 'name' },
+            { header: '전화번호', name: 'phone' },
+            { header: '도로명주소', name: 'addrRoad' },
+            { header: '상세주소', name: 'addrDetail' },
+            { header: '상세위치', name: 'position' },
+            { header: '예정일시', name: 'schedule' },
+            { header: '결제타입', name: 'payTypeTitle' },
+            { header: '결제여부', name: 'payDatetime' },
+            { header: '결제액', name: 'totalAmount' },
+            { header: '접수인', name: 'empClerkUsername' },
+            { header: '수납인', name: 'empCashierUsername' },
+        ],
+        rowHeight: 35,
+        minRowHeight: 35,
+    })
+
+    function search() {
+        searchOptions.orderNo = $("#orderNo").val();
+        searchOptions.name = $("#name").val();
+        searchOptions.phone = $("#phone").val();
+
+        listGrid.readData(1, searchOptions , true);
+    }
+
+    tui.Grid.applyTheme('striped');
+
+
+</script>
+
+
+</html>

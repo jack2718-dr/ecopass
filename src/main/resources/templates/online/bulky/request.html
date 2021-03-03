@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+    <!--    <script type="text/javascript" src="/js/jquery.min.js"></script>-->
+    <!--    <script type="text/javascript" src="/js/jquery-ui.min.js"></script>-->
+    <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/admin/apsol-base.css}">
+
+    <th:block th:replace="config/csrf :: csrfConfig"/>
+    <th:block th:replace="config/jquery :: jqueryConfig"/>
+    <th:block th:replace="config/toast-ui :: toastUiConfig"/>
+
+    <script th:src="@{/common/js/common.js}"></script>
+    <script th:src="@{/common/js/juso-popup.js}"></script>
+
+
+</head>
+
+<style>
+
+    /*상세선택창*/
+    /*상세선택창*/
+    .pop_detail {width:100%; height:100%; position:fixed; left:0; top:0; display:none; z-index: 9999;}
+    .pop_detail2 {width:712px; height:520px; background:white; position:fixed; left:50%; top:50%;
+        margin:-260px -361px; border:1px solid #333; }
+    .pop_detail .top {width:100%; height:30px; line-height:30px; background:#1A3C70; }
+    .pop_detail .top .close {width:30px; height:30px; float:right; margin-right:10px; cursor:pointer;
+        text-align:center; }
+    .pop_detail .top .close img {height:17px; vertical-align:middle; }
+    .pop_detail .content {width:100%; height:100%; padding:30px 20px; margin-top:-30px; }
+    .pop_detail .pop_title {width:100%; height:35px; line-height:35px; margin-top:10px; font-weight:bold;
+        font-size:17px;  overflow:hidden; }
+    .pop_detail input{float: right; border: 1px solid #999; padding: 3px; margin-top: 13px; height: 25px; widht: 30%; font-size: 10pt; }
+    .tb_detail_t {width:95%; margin:20px auto 0 auto; border-top:1px solid #333; }
+    .tb_detail_t table {width:100%; border-collapse:collapse; }
+    .tb_detail_t td {height:25px; text-align:center; background:#f5f5f5; border:none; font-weight:bold;
+        box-sizing:border-box; }
+    .tb_detail {width:95%; height:300px; margin:auto; border-bottom:1px solid #333; overflow:auto; }
+    .tb_detail table {width:100%; border-collapse:collapse; }
+    .tb_detail td {height:35px; border:1px solid #ddd; box-sizing:border-box; text-align:center; }
+    .tb_detail td:nth-child(1) {border-left:none; text-align:left; padding:0 10px; }
+    .tb_detail td:nth-child(2) {text-align:left; padding:0 10px; }
+    .tb_detail td:nth-child(4) {border-right:none; }
+    .tb_detail .none {text-align:center !important; border:none; }
+    .box_bt_detail {margin:30px auto; }
+
+    /* 모바일 */
+    @media (max-width:1200px) {
+        .pop_detail2 {width:100%; height:100%; position:fixed; left:0; top:0; margin:0; }
+        .pop_detail .content {padding:30px 10px; }
+        .pop_detail .tb_detail_t td {padding:0 5px; font-size:11px; }
+        .pop_detail .tb_detail td {padding:0 5px; font-size:11px; }
+    }
+
+</style>
+
+<!-- 상세품목팝업 -->
+<!-- 상세품목팝업 -->
+<div class="pop_detail">
+    <div class="pop_detail2">
+        <div class="top">
+            <div class="close" onclick="selectCancle()"><img src="/img/close.png"/></div>
+        </div>
+        <div class="content">
+            <div style="display: flex; border-bottom:1px solid #333;"><div class="pop_title">상세선택</div> <input type="text" id="filter" placeholder="품목 검색"/></div>
+            <div class="tb_detail_t">
+                <table><tr><td>품목</td><td>규격</td><td>금액</td><td>선택</td></tr></table>
+            </div>
+            <input type="hidden" name="sub_seq"/>
+            <div class="tb_detail"><table id="subject_table"></table></div>
+            <div class="box_bt box_bt_detail">
+                <div class="bt" onclick="selectCancle()">취소</div>
+                <div class="bt bt2" onclick="detail_select()">확인</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<body>
+
+    <script>
+
+        var is_show = false;
+
+        function getCbForm(id, onclick, padding, checked) {
+            if(!onclick)
+                onclick = '';
+            if(!padding)
+                padding = 0;
+            if (!checked)
+                checked = '';
+            return '<input class="cb" type="checkbox" id="'+id+'" name="'+id+'" onchange="'+onclick+'" '+checked+'>'
+                    +'<label class="cb_label" style="padding: '+padding+'px 9px;" for="'+id+'"></label>';
+
+            // 메뉴 보이기
+            function show_pop_menu() {
+
+                if (! is_show){
+                    $('.pop_me').show();
+                    setTimeout(function () {$('.pop_menu').css({'opacity':1}); }, 200);
+                }else{
+                   $('.popo_menu') .css({'opacity':0});
+                   $('.pop_menu').hide();
+                }
+                is_show = !is_show;
+            }
+        }
+    </script>
+    <div class="rightContent">
+        <div class="main_title"> 배출신청 </div>
+
+        <!--배출자 정보-->
+        <div></div>
+    </div>
+
+    <script>
+        var menus = [[${categories}]];
+            var tmp = '';
+            for (var i=0; i<menus.length; i++){
+                tmp += '<div class="item" onclick="show_pop_detail(true, \''+menus[i]+'\', \'online\')">'+menus[i]+'</div>';
+            }
+
+        var selected_type;
+
+            function show_pop_detail(is_show,type,point) {
+                if (! is_show){
+                    $('.pop_detail').hide();
+
+                    $('body').css('overflow','auto');
+                }else{
+                    if (selected_type != type && type != '스마트렌즈 검색결과'){
+                        $('.tb_detail table').html('<tr><td class="none" colspan="4">데이터를 불러오는중</td></tr>');
+
+                        var sendData = {'Sub_group':type};
+                        // $.ajax({
+                        //     url:'requestCall.do',
+                        //     type:'post',
+                        //     data:sendData,
+                        //     contentType:'application/x-www-form-urlencoded',
+                        //     dataType:'json',
+                        //     success:function(data) { callback(data,point); }
+                        // });
+                    }
+                    $('.pop_detail .pop_title').html(type);
+                    $('.pop_detail').show();
+                    $('body').css('overflow','hidden');
+                    selected_type = type;
+                }
+            }
+        function selectCancle() {
+            var checkbox = $('.cb');
+            for(var i=0; i<checkbox.length; i++){
+                var bool = checkbox[i].checked;
+                if(bool){
+                    checkbox[i].checked = false;
+                }
+            }
+            $('.pop_detail').hide();
+            $('body').css('overflow','auto');
+        }
+
+        // 상세품목 세팅
+        function callback(data, type) {
+            subjects = data;
+            var tmp = '';
+            var sortSub = subjects.sort();
+            for(var i=0; i<sortSub.length; i++) {
+                var item = sortSub[i];
+                /* if(type != 'smartLens'){ */
+                tmp += '<tr><td>'+item['sub_name']+'</td><td>'+item['sub_standard']+'</td><td>'+comma(item['sub_price'])+'</td>'
+                    +'<td>'+getCbForm('cb_sbj' + i)+'</td></tr>';
+                /* }else{
+                    tmp += '<tr><td>'+item['sub_name']+'</td><td>'+item['sub_standard']+'</td><td>'+comma(item['sub_price'])+'</td>'
+                    +'<td>'+getCbForm('cb_sbj' + i)+'</td></tr>';
+                } */
+
+            }
+            $('.tb_detail table').html(tmp);
+
+            if(sortSub.length == 0) {
+                var none = '<tr><td colspan="4" style="text-align:center; border:none;">표시할 내용이 없습니다</td></tr>';
+                $('.tb_detail table').html(none);
+            } else {
+                $(window).resize(function() {
+                    for(var i=1; i<=3; i++) {
+                        var width = $('.tb_detail td:nth-child('+i+')').outerWidth();
+                        $('.tb_detail_t td:nth-child('+i+')').css({'width':width});
+                    }
+                }).resize();
+            }
+
+        }
+
+    </script>
+</body>
+</html>

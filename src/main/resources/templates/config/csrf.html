@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html	lang="ko"
+		xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org" >
+	<head>
+		<th:block th:fragment="csrfConfig">
+			<meta name="_csrf" 			th:content="${_csrf.token}"/>
+			<meta name="_csrf_header"	th:content="${_csrf.headerName}"/>
+
+			<script>
+				// getter
+				function getCsrfHeader(){
+					return $("meta[name='_csrf_header']").attr("content");
+				}
+				// getter
+				function getCsrfToken(){
+					return $("meta[name='_csrf']").attr("content");
+				}
+				// csrf config
+				function configCsrfAjax(xhr) {
+					xhr.setRequestHeader(getCsrfHeader(), getCsrfToken());
+				}
+			</script>
+		</th:block>
+	</head>
+</html>
+
+<!--
+ *********************사용 방법************************
+ 
+<th:block th:replace="config/csrf :: csrfConfig"/>
+
+$.ajax({
+	url 			: "/tool/juso/position",
+	method 			: "POST",
+	contentType 	: "application/json; charset=utf-8",
+	data 			: JSON.stringify(juso),
+	dataType 		: "json",
+	beforeSend		: function(xhr) {configCsrfAjax(xhr)}, // fragment csrfAjaxConfig ************************
+})
+
+-->

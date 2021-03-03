@@ -1,0 +1,132 @@
+body, html{padding:0px; margin: 0px; line-height: 1;font-family: 'Noto Sans', sans-serif !important; -webkit-font-smoothing: antialiased;}
+a,b,p{line-height: 1; margin: 0px; padding: 0px; text-decoration: none;}
+
+
+.clientBody{}
+.headerBox{padding:0 5%; box-sizing: border-box; position: fixed; top: 0; left: 0; width: 100%; z-index: 9; background-color: white;}
+.headerInner{max-width: 1200px; margin: 0 auto; width: 100%; height: 60px; display: flex; justify-content: space-between;align-items: center;}
+.headerLogo{ height: 40px;}
+.headerLogoHref{height: 40px;}
+.moIcon{}
+.headerMenuList{}
+.headerMenu{font-size: 18px; font-weight: 400; color: #333333; padding:5px 20px; cursor: pointer;}
+.headerPoint{ border: 1px solid #1f9cd8; border-radius: 20px; color: #1f9cd8;}
+.headerPoint:hover{background-color: #009cd8; color:white;}
+
+
+
+
+
+
+.clientContent{width: 100%; min-height: 100vh; position: relative;}
+.mainBannerBox{}
+.mainBannerTextBox{position: absolute; top: 0; left: 0; z-index: 5; width: 100%; height: 100%; padding: 0 5%; box-sizing: border-box;}
+.mainBannerTextInner{max-width: 1200px; margin: 0 auto; display: flex; width: 100%; height: 100%; align-items: center;}
+.mainBannerTextUnit{}
+.mainBannerText{color: white; font-size: 36px; line-height: 1.2;}
+.mainBannerText b{font-weight: 300;}
+.mainBannerText .bold{font-weight: 600;}
+.bannerBtnBox{font-size: 26px; display: block; width: 240px; text-align: center; border: 2px solid #0a2d41; border-radius: 50px; padding: 10px 12px; margin-bottom: 10px; box-sizing: border-box; cursor: pointer;}
+.bannerFullBtn{margin-top: 20px; background-color: #0a2d41; color: white;}
+.mainBannerInner{overflow: hidden; height: 600px; position: relative; margin-top: 60px;}
+.mainBannerImgBox{position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 1;height: 100%;}
+.mainBanner{height: 100%;}
+.mainBannerImg{height: 100%;}
+
+.mainBannerSubImgBox{position: absolute;  width: 100%; right: 0; bottom: 0; padding-right: 5%;}
+.mainBannerSub_01{width: fit-content; margin: 0 0 0 auto; height: 100%; padding-right: 250px;}
+.mainBannerSub_02{width: 350px; margin: 0 0 0 auto; height: 100%; display: flex; flex-wrap: wrap; align-content: space-between;}
+.mainBannerImg_01{height: 100%;}
+
+.subBanner_01{height: 550px; z-index: 2;}
+.subBanner_02{height: 550px; z-index: 1; margin-right: 100px;}
+.mainBannerImg_02{padding-bottom: 50px;}
+.mainBannerSubCopy{color: white;font-size: 20px; font-weight: 200; word-break: keep-all; line-height: 1.4;}
+.mainBannerSubCopy:nth-child(1){margin-bottom: 10px;}
+
+.contentInner{width: 100%;padding: 0 5%; margin: 0 auto; box-sizing: border-box;}
+.mainBtnBox{max-width: 1200px; margin: 0 auto; box-sizing: border-box; margin-top: 50px;}
+.mainBtnList{display: flex; flex-wrap: wrap; width: 100%; justify-content: space-between;}
+.mainBtnUnit{width: 32.8%; border: 1px solid #1f9cd8; border-radius: 10px; padding:10px 20px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; cursor: pointer; margin-bottom: 10px;}
+.mainBtnText{font-size: 20px; font-weight: 500; line-height: 1.2; color: #1f9cd8;}
+.mainBtnIcon{height: 80px;}
+.mainBtnUnit:hover{background: rgba(31,156,216,0.08);}
+
+.footerBox{background-color: #f2f2f2; padding:30px 5%; margin-top: 30px;}
+.footerInner{max-width: 1200px; width: 100%; margin: 0 auto;}
+.footerLogo{width: 120px; opacity: 0.3; margin: 0 auto;}
+.footerInfoBox{text-align: center; margin-top: 20px;}
+.footerInfo{text-align: center; color: #808080; font-size: 13px;font-weight: 300; line-height: 1.4;}
+.footerCopy{margin-top: 10px; padding-top: 10px; border-top: 1px solid #c8c8c8; text-align: center; color: #808080; font-size: 12px;font-weight: 300; line-height: 1.4;}
+
+.show579{display: none;}
+
+
+@media (max-width:839px){
+    .mainBannerInner{height: 80vh;}
+    .mainBannerTextInner{align-items: flex-start;}
+    .mainBannerTextUnit{margin-top: 5vh;}
+    .subBanner_01, .subBanner_02{height: 40vh;}
+    .subBanner_02{margin-right: 30px;}
+    .mainBannerSub_01{padding-right: 0px; margin: 0px; margin-left: 30px;}
+    .mainBannerText{font-size: 32px;}
+    .headerMenu{font-size: 16px;}
+    .bannerBtnBox{font-size: 22px; width: 200px;}
+
+    .mainBtnUnit{width: 49%; padding:5px 20px;}
+    .mainBtnText{font-size: 16px;}
+    .mainBtnIcon{height: 70px;}
+    
+    .footerLogo{width: 100px;}
+    .footerInfo{font-size: 12px; word-break: keep-all;}
+    .footerCopy{font-size: 11px;}
+    .mainBannerSubCopy{font-size: 16px;}
+    .mainBannerImg_02{padding-bottom: 30px;}
+    
+}
+
+@media (max-width:579px){
+    .headerLogoHref, .headerLogo{height: 30px;}
+    .headerMenu{padding:4px 16px; font-size: 14px;}
+    .mainBannerText{font-size: 24px;}
+    .bannerBtnBox{border-width: 1px; font-size: 18px; padding:8px 14px; width: 180px; margin: 0 auto; margin-bottom: 5px;}
+    .mainBannerTextUnit{text-align: center; margin: 0 auto; }
+    .bannerFullBtn{margin-top: 20px;}
+    .hide579{display: none;}
+    .show579{display: block;}
+    .mainBannerSubImgBox{padding-right: 0px;margin-right:0px;}
+    .mainBannerSub_01{padding-right: 0px; margin: 0px; position: absolute; bottom: 0px;left: 50%; transform: translateX(-50%);}
+    .mainBannerSub_02{margin: 0 auto; padding: 0 5%; box-sizing: border-box; width: initial;}
+    .mainBannerTextBox{}
+    .mainBtnIcon{height: 44px;}
+    .mainBtnUnit{padding:5px 5px 5px 10px;}
+    .mainBtnText{font-size: 13px;}
+    .subBanner_01{height: 32vh;}
+    .mainBannerTextUnit{padding-top: 5vh;}
+    .mainBannerInner{min-height: 580px;}
+    .subBanner_02{height: 100%;}
+    .mainBannerSub_02{align-content: flex-end;}
+    .mainBannerSubCopyBox{margin-bottom: 35vh;width: 100%; padding: 8px 0; border-top: 1px solid white;
+    border-bottom: 1px solid white;}
+    .mainBannerSubCopy{text-align: center; font-size: 14px; max-width: 300px; margin: 0 auto;}
+    .mainBtnBox{margin-top: 30px}
+    .footerBox{margin-top: 20px;}
+}
+
+@media (max-width:280px){
+    .mainBannerText{font-size: 20px;}
+    .headerMenuList{display: flex; flex-wrap: wrap; justify-content: flex-end;}
+    .bannerBtnBox{font-size: 16px;}
+    .mainBtnUnit{width: 100%;}
+    .footerInfoBox{text-align: left;}
+}
+
+
+
+
+
+
+.comImg{width: 100%;}
+.comImgH{height: 100%;}
+.bold{font-weight: 500;}
+.subColor{color: #ffff96;}

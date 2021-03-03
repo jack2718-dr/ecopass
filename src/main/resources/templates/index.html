@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>동작구 청소행정</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width = device-width, initial-scale = 1.0" />
+
+    <link rel="stylesheet" type="text/css" th:href="@{/admin/apsol-base.css}">
+
+    <th:block th:replace="config/jquery :: jqueryConfig"/>
+    <th:block th:replace="config/magnific-popup :: magnificPopupConfig"/>
+
+    <style>
+        .white-popup-block {
+            background: #FFF;
+            padding: 20px 30px;
+            text-align: left;
+            max-width: 650px;
+            margin: 40px auto;
+            position: relative;
+        }
+        @media (max-width:1200px) {
+            .white-popup-block {height:100%; position:fixed; left:0; top:0; margin:0; }
+        }
+    </style>
+
+</head>
+<body>
+        <a class="popup-modal" href="#test-modal">Open modal</a>
+
+        <div id="test-modal" class="mfp-hide white-popup-block">
+            <h1>Modal dialog</h1>
+            <p>You won't be able to dismiss this by usual means (escape or
+                click button), but you can close it programatically based on
+                user choices or actions.
+            asdf
+            sdf
+            asd
+            fas
+            df
+            asd
+            f
+            asd
+            f
+            asd
+            f
+            asd
+            f
+            asd
+            f
+            asd
+            fa
+            s</p>
+            <p><a class="popup-modal-dismiss" href="#">Dismiss</a></p>
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                $('.popup-modal').magnificPopup({
+                    type: 'inline',
+                    preloader: false,
+                    focus: '#username',
+                    modal: true
+                });
+                $(document).on('click', '.popup-modal-dismiss', function (e) {
+                    e.preventDefault();
+                    $.magnificPopup.close();
+                });
+            });
+        </script>
+</body>
+
+<script>
+
+</script>
+</html>

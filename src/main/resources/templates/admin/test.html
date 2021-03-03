@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>동작구 청소행정</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/admin/apsol-base.css}">
+
+    <style>
+        .wrapper {
+            background-color: #fff;
+            color: #444;
+            display: flex;
+        }
+
+        .box {
+            overflow: hidden;
+            background-color: #444;
+            color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            font-size: 150%;
+            box-sizing: border-box;
+            flex: 1 1 auto;
+        }
+
+        .handler {
+            width: 20px;
+            padding: 0;
+            cursor: ew-resize;
+            flex: 0 0 auto;
+        }
+
+        .handler::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 100%;
+            background: red;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="box a">A</div>
+        <div class="handler"></div>
+        <div class="box b">B</div>
+    </div>
+</body>
+<script>
+    var handler = document.querySelector('.handler');
+    var wrapper = handler.closest('.wrapper');
+    var boxA = wrapper.querySelector('.box');
+    var isHandlerDragging = false;
+
+    document.addEventListener('mousedown', function(e) {
+        // If mousedown event is fired from .handler, toggle flag to true
+        if (e.target === handler) {
+            isHandlerDragging = true;
+        }
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        // Don't do anything if dragging flag is false
+        if (!isHandlerDragging) {
+            return false;
+        }
+
+        // Get offset
+        var containerOffsetLeft = wrapper.offsetLeft;
+
+        // Get x-coordinate of pointer relative to container
+        var pointerRelativeXpos = e.clientX - containerOffsetLeft;
+
+        // Arbitrary minimum width set on box A, otherwise its inner content will collapse to width of 0
+        var boxAminWidth = 60;
+
+        // Resize box A
+        // * 8px is the left/right spacing between .handler and its inner pseudo-element
+        // * Set flex-grow to 0 to prevent it from growing
+        boxA.style.width = (Math.max(boxAminWidth, pointerRelativeXpos - 8)) + 'px';
+        boxA.style.flexGrow = 0;
+    });
+
+    document.addEventListener('mouseup', function(e) {
+        // Turn off dragging flag when user mouse is up
+        isHandlerDragging = false;
+    });
+</script>
+</html>

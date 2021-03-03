@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>동작구 청소행정</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/admin/apsol-base.css}">
+
+    <th:block th:replace="config/csrf :: csrfConfig"/>
+    <th:block th:replace="config/jquery :: jqueryConfig"/>
+    <th:block th:replace="config/toast-ui :: toastUiConfig"/>
+
+    <script th:src="@{/common/js/common.js}"></script>
+    <script th:src="@{/common/js/juso-popup.js}"></script>
+
+    <style>
+        .form-container {
+            margin: 0px;
+            padding: 0px;
+            display: grid;
+            grid-template-columns: 6fr 3fr;
+            grid-template-rows: 35px 1fr;
+            height: 100%;
+        }
+        .form-wrapper {
+            display: grid;
+            grid-template-rows: 3fr 2fr;
+            height: 100%
+        }
+        .price-wrapper,
+        .grid-wrapper {
+            height: 100%;
+        }
+        .price-toolbar,
+        .form-toolbar {
+            box-sizing: border-box;
+            border-bottom: 2px solid #BBBBBB;
+        }
+        .wrapper-divider {
+            background-color: #aaaaaa;
+        }
+        .radio-group {
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            margin: 4px;
+            padding: 4px;
+            border-radius: 10px;
+            display:none;
+        }
+    </style>
+</head>
+<body>
+<div class="apsol-base base-container">
+    <div th:replace="/admin/fragment/category.html :: admin-category"></div>
+    <div th:replace="/admin/fragment/menu.html :: admin-menu"></div>
+    <div class="apsol-base base-wrapper">
+        <div th:replace="/admin/fragment/header.html :: admin-header"></div>
+        <div class="apsol-base base-content">
+            <!-------------------------------------------------------------------------->
+            <!-------------------------------------------------------------------------->
+<div class="form-container">
+    <div class="form-toolbar">
+        <button
+                onclick="formSubmit();">
+            접수하기
+        </button>
+    </div>
+    <div class="price-toolbar">
+        <select id="categoryFilter">
+            <option th:each="categoryName:${categoryNames}"
+                    th:value="${categoryName}"
+                    th:text="${categoryName}">
+            </option>
+        </select>
+        <input type="text" id="nameFilter" value=""/>
+    </div>
+    <div class="form-wrapper">
+        <div class="form-content">
+            <form
+                th:action="@{/admin/bulky/request}" th:object="${adminBulkyRequestDto}"
+                id="requestForm"
+                action="#" method="post">
+                <sec:csrfInput>
+                <input
+                        th:field="*{bemd}" name="bemd" id="bemd"
+                        type="text"
+                        readonly="readonly" />
+                <input
+                        th:field="*{lat}" name="lat" id="lat"
+                        type="text"
+                        readonly="readonly" />
+                <input
+                        th:field="*{lng}" name="lng" id="lng"
+                        type="text"
+                        readonly="readonly" />
+                <input
+                        th:field="*{addrJibun}" name="addrJibun" id="addrJibun"
+                        type="text"
+                        readonly="readonly" />
+                <input
+                        th:field="*{sido}" name="sido" id="sido"
+                        type="text"
+                        readonly="readonly" />
+                <input
+                        th:field="*{sgg}" name="sgg" id="sgg"
+                        type="text"
+                        readonly="readonly" />
+                <input
+                        th:field="*{zipCode}" name="zipCode" id="zipCode"
+                        type="text"
+                        readonly="readonly" />
+                <table>
+                    <tr><td>	<span>*</span> 이름 </td>
+                        <td>
+                            <input
+                                    th:field="*{name}" name="name" id="name"
+                                    type="text" required="required" maxlength="30"
+                                    placeholder="이름" /> <br>
+                            <small
+                                    th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                                    style="color:red;">??</small><br/>
+                        </td>
+                    </tr>
+                    <tr><td>	<span>*</span> 휴대전화번호 </td>
+                        <td>
+                            <input
+                                th:field="*{phone}" name="phone" id="phone"
+                                type="text" required="required" maxlength="30"
+                                placeholder="휴대전화번호" />
+                            <input
+                                th:field="*{smsAgree}" name="smsAgree" id="smsAgree"
+                                type="checkbox" />
+                            <span>sms 수신동의</span>
+                        </td>
+                    </tr>
+                    <tr><td>	<span>*</span> 배출주소 </td>
+                        <td>
+                            <input
+                                    th:field="*{addrRoad}" name="addrRoad" id="addrRoad"
+                                    type="text" required="required" maxlength="100" readonly
+                                    placeholder="도로명주소" onclick="openJusoPopup(`BULKY`);" />
+                            <button type="button" onclick="openJusoPopup();">검색</button>
+
+                        </td>
+                    </tr>
+                    <th:block th:replace="/common/juso-popup2.html :: jusoModalFragment"/>
+
+                    <tr><td>	<span>*</span> 상세주소 </td>
+                        <td>
+                            <input
+                                    th:field="*{addrDetail}" name="addrDetail" id="addrDetail"
+                                    type="text" required="required" maxlength="50"
+                                    placeholder="상세주소" />
+                        </td>
+                    </tr>
+                    <tr><td>	<span>*</span> 상세배출위치 </td>
+                        <td>
+                            <input
+                                    th:field="*{position}" name="position" id="position"
+                                    type="text" required="required" maxlength="50"
+                                    placeholder="상세배출위치" /> <br>
+                            <small style="color:red;">
+                                ※아파트의 경우, 몇 동 앞 분리수거장인지 꼭 기재해주세요. <br/>
+                                예시) 102동 앞 재활용장, 정문 앞, 건물 뒤 등  </small>
+                        </td>
+                    </tr>
+                    <tr><td>	<span>*</span> 행정동 </td>
+                        <td>
+                            <select
+                                    th:field="*{hemd}" name="hemd" id="hemd">
+                                <option value=' '>필수 선택</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td>	<span>*</span> 배출예정일 </td>
+                        <td>
+                            <input
+                                    th:field="*{scheduleDate}" name="scheduleDate" id="scheduleDate"
+                                    type="text" readonly />
+                            <select
+                                    th:field="*{scheduleTime}" name="scheduleTime" id="scheduleTime">
+                                <option value="">배출예정시간</option>
+                                <option value="10.00.00">오전 00:00 ~ 오전 09:00</option>
+                                <option value="12.00.00">오전 09:00 ~ 오전 11:00</option>
+                                <option value="14.00.00">오전 11:00 ~ 오후 13:00</option>
+                                <option value="23.59.59">오후 13:00 ~ 오후 23:59</option>
+                            </select>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr style="display: none"><td>	<span>*</span> 수거방법</td>
+                        <td>
+                            <label> <input type="radio" name="visitCollect" value="0" checked>
+                                배출수거
+                            </label>
+                            <label> <input type="radio" name="visitCollect" value="1">
+                                방문수거
+                            </label>
+                        </td>
+                    </tr>
+                    <tr><td>	<span>*</span> 결제방법</td>
+                        <td>
+                            <label> <input type="radio" name="visitPay" value="0" checked>
+                                일반결제
+                            </label>
+                            <label> <input type="radio" name="visitPay" value="1">
+                                방문결제
+                            </label>
+                            <div id="payTypeGroup" class="radio-group" style="float: right">
+                                <small>
+                                    <label> <input type="radio" name="payType" value="OFF_CASH">
+                                        현금
+                                    </label>
+                                    <label> <input type="radio" name="payType" value="OFF_CARD">
+                                        카드
+                                    </label>
+                                    <label> <input type="radio" name="payType" value="OFF_BANK">
+                                        무통장
+                                    </label>
+                                    <label> <input type="radio" name="payType" value="OFF_FREE">
+                                        수수료면제
+                                    </label>
+                                </small>
+                                <div id="freeTypeGroup" class="radio-group">
+                                    <small>
+                                        <label> <input type="radio" name="freeType" value="SUBSIDY">
+                                            한부모가정
+                                        </label>
+                                        <label> <input type="radio" name="freeType" value="SINGLE">
+                                            수급자
+                                        </label>
+                                        <label> <input type="radio" name="freeType" value="NATIONAL">
+                                            국가유공자
+                                        </label>
+                                    </small>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            <div id="priceDtosWrapper"></div>
+            <input
+                    th:field="*{totalAmount}" name="totalAmount" id="totalAmount"
+                    type="number" />
+            </form>
+        </div>
+        <div class="grid-wrapper">
+            <div id="formGrid"></div>
+        </div>
+    </div>
+    <div class="price-wrapper">
+        <div id="priceGrid"></div>
+    </div>
+</div>
+            <!-------------------------------------------------------------------------->
+            <!-------------------------------------------------------------------------->
+        </div>
+        <div th:replace="/admin/fragment/toolbar.html :: admin-toolbar"></div>
+    </div>
+</div>
+</body>
+<script th:inline="javascript">
+    // var dto = [[${dto}]];
+
+    // 가격표 그리드 _ 데이터소스
+    var priceListUrl = "/common/bulky-price/list";
+
+    // 수정 중인 cell
+    var editingFlag = false;
+
+    // 1이면 정상가격, 0이면 0원
+    var payFlag = 1;
+
+    // DOM tree on created
+    $(document).ready( function (){
+        // visit_pay, pay_type, free_type 체크박스 컨트롤
+        controlVisitPayRadio('input[name=visitPay]');
+        $('input[name=visitPay]').change(function(){
+            controlVisitPayRadio(this);
+        });
+        controlPayTypeRadio('input[name=payType]');
+        $('input[name=payType]').change(function(){
+            controlPayTypeRadio(this);
+        });
+        // /static/common/js/common.js
+        // 전화번호 <input>
+        onKeyupAddHyphen("#phone");
+        // 배출예정일 <input>
+        $("#scheduleDate").val(getDotDate(getFutureDate(0)));
+        setDatePicker("#scheduleDate");
+        blockPastDate("#scheduleDate");
+        // css control
+        $(".tui-grid-btn-filter").hide();
+        $(".tui-grid-border-line-top").hide();
+    });
+
+    // 가격표 그리드 인스턴스
+    var priceGrid = new tui.Grid({
+        el: document.getElementById('priceGrid'),
+        data: {
+            initialRequest: true, // 초기화시 요청
+            api: {
+                readData: { url: priceListUrl, method: 'GET' }
+            }
+        },
+        bodyHeight: 'fitToParent',
+        rowHeight: 35,
+        minRowHeight: 35,
+        columns: [
+            { header: '분류', name: 'categoryName', filter: { type: 'select' }, width: 'auto' },
+            { header: '품목', name: 'itemName', filter: { type: 'text' }, width: 'auto' },
+            { header: '규격', name: 'itemStandard' },
+            { header: '가격', name: 'itemPrice', width: 'auto' }
+        ],
+    });
+
+    tui.Grid.applyTheme('striped');
+
+    // 가격표 그리드 _ input 품목명 필터링
+    $("#nameFilter").on('keyup', function(ev) {
+        var nameFilterValue = $(this).val();
+        if (isBlank(nameFilterValue)) {
+            // 빈값일 경우 필터링 해제
+            priceGrid.unfilter('itemName');
+        } else {
+            // 필터링 적용
+            priceGrid.filter('itemName', [{code: 'contain', value: nameFilterValue}]);
+        }
+    })
+
+    // 가격표 그리드 _ select-box 카테고리 필터링
+    $("#categoryFilter").on('change', function(ev) {
+        var categoryFilterValue = $(this).val();
+        if (categoryFilterValue === "전체") {
+            // 전체 항목 선택했을 경우 필터링 해제
+            priceGrid.unfilter('categoryName');
+        } else {
+            // 필터링 적용
+            priceGrid.filter('categoryName', [{code: 'eq', value: categoryFilterValue}]);
+        }
+    })
+
+    // 가격표 그리드 _ 더블클릭시 선택품목 그리드로 전송
+    priceGrid.on('dblclick', function (ev) {
+        var priceRow = priceGrid.getRow(ev.rowKey);
+        var targetRow = formGrid.getRow(priceRow.rowKey);
+        if (isBlank(targetRow)){
+            // 중복 데이터가 없다면 추가한다
+            formGrid.appendRow(priceRow, {
+                at : 0,
+                extendPrevRowSpan : false,
+                focus : true,
+            })
+        } else {
+            // 중복 데이터가 있다면 갯수를 늘린다
+            formGrid.setValue(priceRow.rowKey, 'quantity', Number(targetRow.quantity) + 1, false);
+        }
+    });
+
+    // 선택품목 그리드 인스턴스
+    var formGrid = new tui.Grid({
+        el: document.getElementById('formGrid'),
+        bodyHeight: 'fitToParent',
+        rowHeight: 35,
+        minRowHeight: 35,
+        columns: [
+            { header: '품목', name: 'itemName' },
+            { header: '규격', name: 'itemStandard', editor: 'text' },
+            { header: '가격', name: 'itemPrice' },
+            { header: '수량', name: 'quantity', editor: NumberEditor },
+            { header: '금액', name: 'amount' },
+        ],
+        summary: {  // 합계 옵션
+            height : 35,
+            position : 'top',
+            columnContent: {
+                quantity: {
+                    template: function(valueMap) {
+                        return `총량: ${valueMap.sum} 개`;
+                    }
+                },
+                // amount: {
+                //     template: function(valueMap) {
+                //         return `총액: <input id="totalGrid" style="border: none" value=${valueMap.sum * payFlag} /> 원`;
+                //     }
+                // },
+            },
+        }
+    })
+
+    function reloadTotalAmountSummary() {
+        formGrid.setSummaryColumnContent('amount', {
+            template(summary) {
+                return `총액: <input id="totalGrid" style="border: none" value=${summary.sum * payFlag} /> 원`;
+            }
+        });
+    }
+
+    // 선택품목 그리드 _ 셀 수정 이벤트 플래그
+    formGrid.on('editingStart', function(ev) {
+        editingFlag = true;
+    });
+
+    // // 선택품목 그리드 _ 셀 수정 이탈 이벤트 플래그
+    formGrid.on('editingFinish', function(ev) {
+        editingFlag = false
+    });
+
+    // 선택품목 그리드 _ 셀 변환 이벤트 리스너
+    formGrid.on('afterChange', function(ev) {
+        // 변환된 셀 목록을 루프
+        ev.changes.forEach(change => {
+            var targetRow = formGrid.getRow(change.rowKey);
+            // 수량이 변경됨
+            if (change.columnName === "quantity") {
+                // 올바르지 않거나 0 이하의 값인 경우 행 삭제
+                if (change.value <= 0 || isBlank(change.value)) {
+                    alert("삭제됨");
+                    formGrid.removeRow(change.rowKey, {});
+                } else {
+                    // 금액 계산
+                    formGrid.setValue(change.rowKey, 'amount', Number(targetRow.itemPrice) * change.value, false);
+                }
+
+            }
+        });
+    })
+
+    /**
+     * 숫자형 input 커스텀 에디터
+     * @param props
+     * @constructor
+     */
+    function NumberEditor(props) {
+        var el = document.createElement('input');
+        el.type = 'number';
+        el.value = Number(props.value);
+        this.el = el;
+        this.getElement = function(){return this.el;}
+        this.getValue = function(){return this.el.value;}
+        this.mounted = function(){this.el.select();}
+    }
+
+    /**
+     * 결제방법 라디오 버튼의 제어
+     * @param id
+     */
+    function controlVisitPayRadio(id) {
+        if($(id).val() === "0"){
+            $('#payTypeGroup').show();
+        }else{
+            $("input:radio[name='payType']").prop("checked", false);
+            $('#payTypeGroup').hide();
+            $("input:radio[name='freeType']").prop("checked", false);
+            $('#freeTypeGroup').hide();
+        }
+    }
+
+    /**
+     * 결제방법 라디오 버튼의 제어 2
+     * @param id
+     */
+    function controlPayTypeRadio(id) {
+        if($(id).val() === "OFF_FREE"){
+            $('#freeTypeGroup').show()
+            payFlag = 0;
+            reloadTotalAmountSummary();
+        }else{
+            $("input:radio[name='freeType']").prop("checked", false);
+            $('#freeTypeGroup').hide();
+            payFlag = 1;
+            reloadTotalAmountSummary();
+        }
+    }
+
+    /**
+     * 접수하기
+     */
+    function formSubmit() {
+
+        console.log($("#smsAgree").val())
+
+        if (!validOtherInputs()) return;
+        if (!validJusoInputs()) return;
+        if (!validRadios()) return;
+        if (!validEditingCell()) return;
+        if (!copyPriceDtos()) return;
+        if (!setTotalAmount()) return;
+        $("#requestForm").submit();
+    }
+
+    function validOtherInputs() {
+        if ( isBlank($("#name").val()) ) {
+            alert("INVALID\n이름을 입력해주세요");
+            return false;
+        }
+        if ( isBlank($("#phone").val()) ) {
+            alert("INVALID\n전화번호을 입력해주세요");
+            return false;
+        }
+        if ( isBlank($("#position").val()) ) {
+            alert("INVALID\n상세배출위치를 입력해주세요");
+            return false;
+        }
+        if ( isBlank($("#scheduleDate").val()) ) {
+            alert("INVALID\n배출예정일을 선택해주세요");
+            return false;
+        }
+        if ( isBlank($("#scheduleTime").val()) ) {
+            alert("INVALID\n배출예정시간을 선택해주세요");
+            return false;
+        }
+        if ( isBlank($("#totalAmount").val()) ) {
+            alert("INVALID\n이름을 입력해주세요");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 선택품목 그리드 _ 수정 중인 셀이 있는지 검사
+     * @returns {boolean}   *정상여부
+     */
+    function validEditingCell() {
+        if (editingFlag) {
+            alert("INVALID\n선택목록 :: 수정 중인 항목이 존재합니다.\n수정을 완료해주세요.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 라디오 버튼 검사
+     * @returns {boolean}   *정상여부
+     */
+    function validRadios() {
+        if ( isBlank($("input:radio[name='visitPay']:checked").val()) ) {
+            alert("INVALID\n결제방법 :: 일반결제 혹은 방문결제를 선택해주세요.");
+            return false;
+        } else {
+            if ($("input:radio[name='visitPay']:checked").val() === "0") {
+                if ( isBlank($("input:radio[name='payType']:checked").val()) ) {
+                    alert("INVALID\n결제방법 :: 결제 방법을 선택해주세요.");
+                    return false;
+                }
+                if ($("input:radio[name='payType']:checked").val() === "FREE") {
+                    if ( isBlank($("input:radio[name='freeType']:checked").val()) ) {
+                        alert("INVALID\n결제방법 :: 수수료 면제 사유를 선택해주세요.");
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 그리스 써머리에 계산되어 있는 총액 데이터를 폼으로 복사한다
+     * @returns {boolean}   *정상여부
+     */
+    function setTotalAmount() {
+        var val = Number ( $("#totalGrid").html() )
+        $("#totalAmount").val( val );
+        return true;
+    }
+
+    /**
+     * 그리드 항목을 폼으로 복사한다
+     * @returns {boolean}   *정상여부
+     */
+    function copyPriceDtos() {
+        // 초기화
+        var wrapperId = "#priceDtosWrapper";
+        $(wrapperId).empty();
+        // Validation :: 데이터 배열 Empty 검증
+        var gridDatas = formGrid.getData();
+        if (isBlank(gridDatas)) {
+            if ($("input:radio[name='visitPay']:checked").val() === "0"){
+                alert("INVALID\n일반결제 :: 반드시 품목을 선택해야 합니다.");
+                return false;
+            } else {
+                return true;
+            }
+        }
+        // 키값(DTO 변수명) 리스트 출력
+        var keys = Object.getOwnPropertyNames(gridDatas[0]);
+        var idx = 0;
+        // DTO[index].key 형식의 name 을 가진 input 리스트 생성
+        gridDatas.forEach(function(gridData) {
+            keys.forEach(function(key) {
+                var val = gridData[key];
+                if ( !(typeof val === 'object') && !(Array.isArray(val)) && key !== "rowKey" ) {
+                    $(wrapperId).prepend(
+                        `<input
+                                th:field="*{priceDtos[${idx}].${key}" name="priceDtos[${idx}].${key}"
+                                type="hidden" value="${val}"
+                                readonly="readonly" />`
+                    );
+                }
+            });
+            idx++;
+        });
+        return true;
+    }
+
+
+
+</script>
+</html>

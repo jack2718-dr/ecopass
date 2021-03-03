@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html	lang="ko"
+         xmlns="http://www.w3.org/1999/xhtml"
+         xmlns:th="http://www.thymeleaf.org"
+         xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+<head>
+    <meta	http-equiv="Content-Type"
+             content="text/html;	charset=UTF-8" />
+
+    <!--<th:block th:replace="fragment/config/default :: defaultConfig"></th:block>-->
+
+    <title>admin</title>
+</head>
+<body>
+<form
+        th:action="@{/admin/login}"
+        id="loginForm"
+        action="#" method="post">
+
+    <div
+            th:if="${param.error}"
+    >Invalid username and password.</div>
+
+    <div
+            th:if="${param.logout}"
+    >You have been logged out.</div>
+
+    <input
+            name="username" id="username"
+            type="text" placeholder="Email" required="required" />
+
+    <input
+            name="password" id="password"
+            type="password" placeholder="Password" required="required" />
+
+
+
+    <button
+            type="submit"
+    >Login</button>
+</form>
+
+<!-- <form
+    th:action="@{/admin/login/process}" th:object="${adminLoginDTO}"
+    id="loginForm"
+    action="#" method="post">
+
+    <input
+        th:field="*{username}"
+        name="username" id="username"
+        type="text" placeholder="Email" required="required" />
+
+    <small
+        th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+        style="color:red;"></small><br/>
+
+    <input
+        th:field="*{password}"
+        name="password" id="password"
+        type="password" placeholder="Password" required="required" />
+
+    <small
+        th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+        style="color:red;"></small><br/>
+
+    <button
+        type="submit"
+        >Login</button>
+</form> -->
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+</script>
+
+</html>

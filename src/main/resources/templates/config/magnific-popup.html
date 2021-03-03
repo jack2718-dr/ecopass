@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html	lang="ko"
+         xmlns="http://www.w3.org/1999/xhtml"
+         xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:fragment="magnificPopupConfig">
+        <!-- css -->
+        <link 	th:href="@{/vendor/magnific-popup/magnific-popup.css}" rel="stylesheet" type="text/css" />
+        <!-- js -->
+        <script th:src="@{/vendor/magnific-popup/jquery.magnific-popup.min.js}"></script>
+    </th:block>
+</head>
+</html>
+
+<!--
+ *********************사용 방법************************
+
+<th:block th:replace="config/magnific-popup :: magnificPopupConfig"></th:block>
+
+-->

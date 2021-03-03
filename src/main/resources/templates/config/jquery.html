@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html	lang="ko"
+		xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org" >
+	<head>
+		<th:block th:fragment="jqueryConfig">
+			<!-- css -->
+			<link 	th:href="@{/vendor/jquery-ui/jquery-ui.min.css}" rel="stylesheet" type="text/css" />
+			<!-- js -->
+			<script	th:src="@{/vendor/jquery/jquery-3.5.1.js}"></script>
+			<script th:src="@{/vendor/jquery-ui/jquery-ui.min.js}"></script>
+		</th:block>
+	</head>
+</html>
+
+<!--
+ *********************사용 방법************************
+
+<th:block th:replace="config/jquery :: jqueryConfig"/>
+
+-->

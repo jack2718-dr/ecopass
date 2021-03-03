@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<div  th:fragment="jusoModalFragment">
+    <th:block th:replace="config/csrf :: csrfConfig"/>
+    <th:block th:replace="config/toast-ui :: toastUiConfig"/>
+    <th:block th:replace="config/magnific-popup :: magnificPopupConfig"/> <!--jquery 필요-->
+
+
+    <style>
+        .white-popup-block {
+            background: #FFF;
+            padding: 20px 30px;
+            text-align: left;
+            max-width: 650px;
+            margin: 40px auto;
+            position: relative;
+        }
+        @media (max-width:1200px) {
+            .white-popup-block {width:100%; height:100%; position:fixed; left:0; top:0; margin:0; }
+        }
+    </style>
+
+    <!--<a class="popup-modal">Open modal</a>-->
+    <div id="jusoModal" class="mfp-hide white-popup-block">
+        <h1>Modal dialog</h1>
+        <p><a class="juso-modal-dismiss" href="#">Dismiss</a></p>
+
+        <input type="text" id="keyword" onkeyup="onKeyPressEnter();" />
+        <button id="searchBtn" onclick="searchJuso();">검색</button>
+        <div id="tuiGrid"></div>
+    </div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            $('.juso-modal-show').magnificPopup({ // 외부 버튼
+                type: 'inline',
+                preloader: false,
+                modal: true
+            });
+            $('.juso-modal-dismiss').click(function (e) {
+                e.preventDefault();
+                $.magnificPopup.close();
+            });
+        });
+
+    </script>
+
+</div>
+
+</html>
+
+<!-- <meta name="viewport" content="width = device-width, initial-scale = 1.0" /> -->
+<!-- <a class="juso-modal-show" href="#jusoModal">Open modal</a> -->
+<!-- <th:block th:replace="/common/juso-popup2.html :: jusoModalFragment"/> -->

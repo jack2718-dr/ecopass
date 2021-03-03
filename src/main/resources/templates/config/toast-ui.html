@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html	lang="ko"
+         xmlns="http://www.w3.org/1999/xhtml"
+         xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:fragment="toastUiConfig">
+        <!-- css -->
+        <link   th:href="@{/vendor/toast-ui/tui-pagination.css}" rel="stylesheet" type="text/css" />
+        <link   th:href="@{/vendor/toast-ui/new/tui-grid.css}" rel="stylesheet" type="text/css" />
+        <!-- js -->
+        <script th:src="@{/vendor/toast-ui/tui-code-snippet.js}"></script>
+        <script th:src="@{/vendor/toast-ui/tui-pagination.js}"></script>
+        <script th:src="@{/vendor/toast-ui/new/tui-grid.js}"></script>
+    </th:block>
+</head>
+</html>
+
+<!--
+ *********************사용 방법************************
+
+<th:block th:replace="config/toast-ui :: toastUiConfig"/>
+
+-->

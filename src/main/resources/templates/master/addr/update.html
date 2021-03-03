@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>동작구 청소행정</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <th:block th:replace="config/csrf :: csrfConfig"/>
+    <th:block th:replace="config/jquery :: jqueryConfig"/>
+    <th:block th:replace="config/toast-ui :: toastUiConfig"/>
+
+</head>
+<body>
+    <form
+        id="excelUploadForm" >
+        <input
+            name="file"
+            type="file"
+            accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+        <input
+            type="button"
+            value="보기"
+            onclick="uploadExcel();" />
+    </form>
+
+    <div id="grid"></div>
+
+    <button onclick="updateAddrs()">이대로 업데이트하기</button>
+
+</body>
+
+<script>
+
+    var gridData;
+
+    var grid = new tui.Grid({
+        el: document.getElementById('grid'),
+        data: gridData,
+        scrollX: false,
+        scrollY: false,
+        columns: [
+            {
+                header: '행정동(기관)',
+                name: 'hemd'
+            },
+            {
+                header: '법정동',
+                name: 'bemd'
+            },
+        ]
+    });
+
+    function uploadExcel() {
+        const form = $("#excelUploadForm")[0];
+        const formData = new FormData(form);
+        $.ajax({
+            url             : "/master/addr/update/excel-upload",
+            type            : "POST",
+            enctype         : "multipart/form-data",
+            data            : formData,
+            processData     : false,
+            contentType     : false,
+            cache           : false,
+            beforeSend		: function(xhr) {configCsrfAjax(xhr)},
+        })
+        .done((result, status, xhr) => {
+            result.forEach(row => {
+                grid.appendRow(row, {
+                    at : 0,
+                    extendPrevRowSpan : false,
+                    focus : false,
+                })
+            })
+        })
+        .fail((xhr, status, errorThrown) => {
+            console.error(xhr);
+            console.error(status);
+            console.error(errorThrown);
+            alert(xhr.responseJSON.message);
+        })
+    }
+
+    function updateAddrs() {
+
+        console.log(grid.getData());
+
+        $.ajax({
+            url             : "/master/addr/update",
+            type            : "POST",
+            contentType 	: "application/json; charset=utf-8",
+            data            : JSON.stringify(grid.getData()),
+            dataType 		: "json",
+            beforeSend		: function(xhr) {configCsrfAjax(xhr)},
+        })
+        .done((result, status, xhr) => {
+            console.log(result);
+        })
+        .fail((xhr, status, errorThrown) => {
+            console.error(xhr);
+            console.error(status);
+            console.error(errorThrown);
+            alert(xhr.responseJSON.message);
+        })
+    }
+
+
+</script>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html	lang="ko"
+         xmlns="http://www.w3.org/1999/xhtml"
+         xmlns:th="http://www.thymeleaf.org"
+         xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+
+<head>
+    <title>주소 찾기</title>
+    <meta http-equiv="Content-Type" content="text/html;	charset=UTF-8" />
+
+    <th:block th:replace="config/csrf :: csrfConfig"/>
+    <th:block th:replace="config/jquery :: jqueryConfig"/>
+    <th:block th:replace="config/toast-ui :: toastUiConfig"/>
+
+</head>
+
+<body>
+    <input type="text" id="keyword" onkeyup="onKeyPressEnter();" />
+    <button id="searchBtn" onclick="searchJuso();">검색</button>
+    <div id="jusoGrid"></div>
+    <!--<input type="hidden" id="wasteType" th:value="__${wasteType}__"/>--> <!-- PathVariable -->
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+
+    var jusoSearchUrl = "/common/juso-popup/search";
+
+    /**
+     * 그리드 인스턴스 생성
+     */
+    var grid = new tui.Grid({
+        el: document.getElementById('jusoGrid'),
+        data: {
+            initialRequest: true, // 초기화시 요청
+            api: {
+                readData: { url: '/common/juso-popup/search', method: 'GET', initParams: { keyword: "동대문구청" } }
+            }
+        },
+        pageOptions: {
+            perPage: 5, // 페이지당 row 개수
+            useClient: false, // 클라이언트 페이지네이션
+        },
+        columns: [
+            {
+                header: '도로명주소',
+                name: 'roadAddrPart1',
+            },
+            {
+                header: '지번주소',
+                name: 'jibunAddr',
+            }
+        ],
+    });
+
+    // 더블클릭 이벤트
+    grid.on('dblclick', function(ev) {
+        var juso = grid.getRow(ev.rowKey);
+        // delete juso.uniqueKey;
+        // delete juso.rowSpanMap;
+        // delete juso.sortKey;
+        // delete juso.rowKey;
+        // delete juso._attributes;
+        // delete juso._disabledPriority;
+        // delete juso._relationListItemMap;
+        // delete juso.__proto__;
+        requestPosition(juso);
+    });
+
+    // 키보드 이벤트
+    function onKeyPressEnter() {
+        if (window.event.keyCode === 13) {
+            searchJuso();
+        }
+    }
+
+    // 주소 검색 (레코드 요청)
+    function searchJuso() {
+        grid.readData(1, {keyword: $("#keyword").val()}, true);
+    }
+
+    function requestPosition(juso) {
+        $.ajax({
+            url 			: "/common/juso-popup/location-hemd", // 보낸 주소 객체에 좌표값을 담아서 반환한다.
+            method 			: "POST",
+            contentType 	: "application/json; charset=utf-8",
+            data 			: JSON.stringify(juso),
+            dataType 		: "json",
+            beforeSend		: function(xhr) {configCsrfAjax(xhr)}, // fragment csrfAjaxConfig
+        })
+        .done((result) => {
+            if (result.lat === null || result.lng === null)
+                alert("ERROR\n좌표를 찾을 수 없습니다.\n다시 시도해주세요.");
+            else if (result.hemdList.length <= 0 )
+                alert("ERROR\n선택하신 주소는 관할구역이 아닙니다.\n다시 시도해주세요.");
+            else
+                callbackJuso(result); // callbackJuso :: juso-popup.js
+        })
+        .fail((xhr, status, errorThrown) => {
+            alert("ERROR\n시스템 에러.\n다시 시도해주세요.");
+            console.error(xhr);
+        });
+    }
+
+    // 부모 window 에게 요청
+    function callbackJuso(callbackJuso) {
+        opener.callbackJuso(callbackJuso);
+        window.open("about:blank","_self").close();
+    }
+
+
+</script>
+
+</html>
