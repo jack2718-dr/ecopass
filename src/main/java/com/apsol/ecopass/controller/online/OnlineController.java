@@ -39,6 +39,14 @@ public class OnlineController {
     }
 
 
+
+    @GetMapping(value = "requestTest")
+    private String requestTest(){
+
+        return "online/bulky/request";
+    }
+
+
     public List<BulkyItem> findByItemCategoryName(String category){
         QBulkyItem table = QBulkyItem.bulkyItem;
         JPAQuery<BulkyItem> query = queryFactory.selectFrom(table);

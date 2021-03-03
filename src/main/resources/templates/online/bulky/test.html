@@ -4,16 +4,24 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!--        <link rel="stylesheet" href="/css/online/popupTest2.css">-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script
             src="https://code.jquery.com/jquery-3.6.0.js"
             integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
             crossorigin="anonymous"></script>
+<!--    <link rel="stylesheet" type="text/css" th:href="@{/admin/apsol-base.css}">-->
+
+
+
+    <!--    <th:block th:replace="config/csrf :: csrfConfig"/>-->
+    <th:block th:replace="config/jquery :: jqueryConfig"/>
+<!--    <th:block th:replace="config/toast-ui :: toastUiConfig"/>-->
+
+<!--    <script th:src="@{/common/js/common.js}"></script>-->
     <h1>모달 팝업 테스트</h1>
 
-</head>
+
 
 <style>
     <!-- 상세선택 팝업창 -->
@@ -133,7 +141,7 @@
     .box_bt_detail{
         margin: 30px auto;
     }
-    * {
+    * { /*박스 안의 모양 잡아줌 */
         box-sizing: border-box;
     }
 
@@ -155,7 +163,7 @@
         font-weight: 400;
     }
 
-      /*Material Modal CSS*/
+
 
     .modal__trigger {
         position: relative;
@@ -177,12 +185,10 @@
     .modal__trigger:hover {
         background: #e5d3d6;
     }
-    /**
-     * Demo specific CSS
-     */
+
     body {
         height: 100vh;
-        background: #f44336;
+        /*background: #f44336; 배경 빨간색 */
     }
     img {
         max-width: 100%;
@@ -199,7 +205,7 @@
         font-weight: 300;
     }
     .demo-btns .info {
-        background: #f44336;
+        /*background: #f44336; 가운데 빨간색*/
         padding: 3vh 10vw;
         height: 70vh;
         display: flex;
@@ -257,20 +263,17 @@
         }
 
 </style>
+</head>
+
+<body>
+
 <div class="demo-btns">
-
-
     <div class="info">
         <div class="buttons">
-            <p>
-
-                <a href="" data-modal="modal4" class="modal__trigger" onclick="show_pop_detail()">Test</a>
-            </p>
+            <button data-modal="modal4" class="modal__trigger" onclick="show_pop_detail(true)">Test</button>
         </div>
-        <p>Click a button to activate a modal.</p>
     </div>
 </div>
-
 
 <!--프로젝트 적용 시키기 test-->
 <div class="pop_detail">
@@ -292,45 +295,19 @@
         </div>
     </div>
 </div>
-<script th:inline="javascript"> <!-- 프로젝트적용스크립트-->
+</body>
+<script> <!-- 프로젝트적용스크립트-->
 
 var subjects;
+var selected_type; <!-- 상세선택창 보이기 -->
+var is_show = false; <!--현재 사용 안함-->
 
-<!-- 상세선택창 보이기 -->
-var selected_type;
 
-var trigger = $('.modal__trigger');
-var len = trigger.length;
-
-    $(document).ready(function () {
-        $("#filter").keyup(function () {
-            var k = $(this).val();
-            $(".tb_detail table tr").hide();
-            var temp = $(".tb_detail table tr td:nth-child(5n+1):contains('"+k+"')");
-            $(temp).parent().show();
-        })
-    })
-
-var is_show = false;
     function show_pop_detail(is_show, type, point) {
-        if (! is_show){
+        if (!is_show){
             $('.pop_detail').hide();
             $('body').css('overflow', 'auto');
         }else {
-            if (selected_type != type && type != '스마트렌즈 검색결과'){
-                $('.tb_detail table').html('<tr><td class="none" colspan="4">데이터를 불러오는중</td></tr>');
-
-                var sendData = {'Sub_group' : type};
-                $.ajax({
-                    url:'requestCall.do',
-                    type:'post',
-                    data:sendData,
-                    contentType: 'application/x-www-form-urlencoded',
-                    dataType:'json',
-                    success:function (data) {callback(data,point)
-                    }
-                });
-            }
             $('.pop_detail .pop_title').html(type);
             $('.pop_detail').show();
             $('body').css('overflow','hidden');
@@ -338,9 +315,7 @@ var is_show = false;
         }
     }
 
-
-
-
+// 우측 상단 닫기 기능
     function selectCancle(){
     var checkbox = $('.cb');
     for(var i =0; i<checkbox.length; i++){
@@ -351,37 +326,6 @@ var is_show = false;
     }
     $('.pop_detail').hide();
     $('body').css('overflow', 'auto');
-}
-
-function detail_select() {
-    var anything_seleted = false;
-    for(var i=0; i<subjects.length; i++) {
-        var sbj = subjects[i];
-        if($('#cb_sbj'+i).prop('checked')) { checkOverlapDetail(sbj); anything_seleted = true; }
-    }
-
-    if(! anything_seleted) { alert('선택된 품목이 없습니다.'); return; }
-
-    updateSelected();
-    show_pop_detail(false);
-}
-
-// 상세선택 중복확인
-function checkOverlapDetail(sbj) {
-    var tmp_index = -1;
-    for(var i=0; i<selected.length; i++) {
-        if(selected[i]['sub_group'] == sbj["sub_group"] && selected[i]['sub_name'] == sbj["sub_name"]
-            && selected[i]['sub_standard'] == sbj["sub_standard"] && selected[i]['sub_price'] == sbj["sub_price"]
-            && selected[i]['sub_seq'] == sbj["sub_seq"]) {tmp_index = i; }
-
-    }
-
-    if(tmp_index > -1) {
-        selected[tmp_index]["sub_cnt"] += 1;
-    } else {
-        sbj["sub_cnt"] = 1;
-        selected.push(sbj);
-    }
 }
 
 </script>
