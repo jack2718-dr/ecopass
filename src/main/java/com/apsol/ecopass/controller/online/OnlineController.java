@@ -35,7 +35,7 @@ public class OnlineController {
 
         model.addAttribute("categories", "테스트");
 
-        return "online/bulky/request";
+        return "online/bulky/test";
     }
 
 
