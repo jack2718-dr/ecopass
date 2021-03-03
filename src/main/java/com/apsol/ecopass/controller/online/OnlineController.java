@@ -22,27 +22,20 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("online")
+@RequestMapping("online/bulky")
 public class OnlineController {
 
     @Autowired
     private JPAQueryFactory queryFactory;
 
-//    @GetMapping(value = "request.do")
-//    public String request(Model model) {
-//
-//        model.addAttribute("req_status", "");
-//
-//        model.addAttribute("categories", "테스트");
-//
-//        return "online/bulky/test";
-//    }
-
-
     @GetMapping(value = "request")
-    public String requestPage(){
+    public String request(Model model) {
 
-        return "/online/bulky/test";
+        model.addAttribute("req_status", "");
+
+        model.addAttribute("categories", "테스트");
+
+        return "online/bulky/request";
     }
 
 
