@@ -433,6 +433,7 @@
 </div>
 <script> <!-- 프로젝트적용스크립트-->
 
+
 var subjects;
 
 <!-- 상세선택창 보이기 -->
@@ -477,9 +478,25 @@ var len = trigger.length;
         }
     }
 
-    // function open(m, div) {
-    //
-    // }
+    init_signup();
+
+    // 초기화
+    function init_signup(){
+       // init_subHeader('Home > 온라인신청 > 배출신청');
+       // init_leftMenu(1, 'request');
+
+        var menus = [[${categories}]];
+        var tmp = '';
+
+        for(var i=0; i<menus.length; i++){
+            tmp += '<div class="item" onclick="show_pop_detail(true, \''+menus[i]+'\', \'online\')">'+menus[i]+'</div>';
+        }
+        // tmp += '<div class="item" onclick="openSubjectPopup()">무상수거대상</div>';
+        // tmp += '<div class="clear_both"></div>';
+        $('.box_product').html(tmp);
+
+        // updateSelected();
+    }
 
 
     function selectCancle(){
@@ -493,6 +510,18 @@ var len = trigger.length;
     $('.pop_detail').hide();
     $('body').css('overflow', 'auto');
 }
+
+    <!-- 상세품목 셋팅-->
+    function callback(data, type){
+        subjects = data;
+        var tmp = '';
+        var sortSub = subjects.sort();
+        for(var i = 0; i<sortSub.length; i++){
+            var item = sortSub[i];
+            tmp += '<tr><td>'+item['sub_name']+'</td><td>'+item['sub_standard']+'</td><td>'+comma(item['sub_price'])+'</td>'
+                +'<td>'+getCbForm('cb_sbj' + i)+'</td></tr>';
+        }
+    }
 
 </script>
 
