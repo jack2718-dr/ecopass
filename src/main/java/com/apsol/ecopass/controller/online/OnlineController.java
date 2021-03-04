@@ -1,10 +1,13 @@
 package com.apsol.ecopass.controller.online;
 
+import com.apsol.ecopass.dto.common.bulky.BulkyPriceDto;
 import com.apsol.ecopass.entity.bulky.BulkyItem;
 import com.apsol.ecopass.entity.bulky.QBulkyItem;
+import com.apsol.ecopass.service.impl.bulky.BulkyPriceServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,28 +26,30 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("online/bulky")
+@Slf4j
 public class OnlineController {
 
     @Autowired
     private JPAQueryFactory queryFactory;
+
+    @Autowired
+    private BulkyPriceServiceImpl bulkyPriceService;
 
     @GetMapping(value = "request")
     public String request(Model model) {
 
         model.addAttribute("req_status", "");
 
-        model.addAttribute("categories", "테스트");
-
-        return "online/bulky/test";
-    }
-
-
-
-    @GetMapping(value = "requestTest")
-    private String requestTest(){
+        model.addAttribute("categories", bulkyPriceService.getCategoryNames());
 
         return "online/bulky/request";
     }
+
+//    @GetMapping(value = "requestTest")
+//    private String requestTest(){
+//
+//        return "online/bulky/request";
+//    }
 
 
     public List<BulkyItem> findByItemCategoryName(String category){
@@ -56,31 +61,19 @@ public class OnlineController {
         return query.fetch();
     }
 
-    @RequestMapping(value = "requestCall.do")
-    public void reqeustCall(HttpSession session, HttpServletResponse response,
-                            @RequestParam("Sub_group") String Sub_group) throws IOException { // db 건드려야돼서 일단 보류
+    @RequestMapping(value = "requestCall")
+    public void reqeustCall(HttpServletResponse response,
+                            @RequestParam("Sub_group") String Sub_group) throws Exception { // Sub_group : 어떤 카테고리 인지 요청 해당 카테고리에 대한 데이터를 db에서 가져와서 프론트로 다시 보내주는 작업을 해야함
+                                                                                            // 현재 서비스에서 리스트 뽑아오는건 구현됨
+        log.debug("jsonReqs : {}", Sub_group);
 
-     //   log.debug("jsonReqs : {}", Sub_group);
+        List<BulkyPriceDto> itemList = bulkyPriceService.getPriceList();
+        List<Map<String, Object>> result = new ArrayList<>();
+        for(BulkyPriceDto dto : itemList){
 
-        List<BulkyItem> itemList = new ArrayList<>();
-
-        itemList = findByItemCategoryName(Sub_group);
-
-        List<Map<String, Object>> results = new ArrayList<>();
-        for (BulkyItem entity : itemList) {
-            Map<String, Object> data = new HashMap<>();
-            data.put("sub_name", entity.getName());
-            data.put("sub_standard", entity.getStandard());
-            data.put("sub_price", entity.getPrice());
-            results.add(data);
         }
 
-        ObjectMapper om = new ObjectMapper();
-        String json = om.writeValueAsString(results);
-        response.setContentType("text/html;charset=utf-8");
-        PrintWriter out = response.getWriter();
-        out.println(json);
-        out.close();
+
     }
 
 
