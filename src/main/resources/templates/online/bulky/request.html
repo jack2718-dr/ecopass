@@ -42,6 +42,12 @@
 		.tb_detail td:nth-child(4) {border-right:none; }
 		.tb_detail .none {text-align:center !important; border:none; }
 		.box_bt_detail {margin:30px auto; }
+		* { /*박스 안의 모양 잡아줌 */
+			box-sizing: border-box;  /* content-box : 콘텐트 영역을 기준으로 크기를 정합니다.
+										border-box : 테두리를 기준으로 크기를 정합니다.
+										initial : 기본값으로 설정합니다.
+										inherit : 부모 요소의 속성값을 상속받습니다.*/
+		}
 
 		/* 모바일 */
 		@media (max-width:1200px) {
@@ -49,13 +55,85 @@
 			.pop_detail .content {padding:30px 10px; }
 			.pop_detail .tb_detail_t td {padding:0 5px; font-size:11px; }
 			.pop_detail .tb_detail td {padding:0 5px; font-size:11px; }
+			.demo-btns .trigger {
+				margin-bottom: 0.8rem;}
+		}
+
+		/* 버튼 */
+
+		.demo-btns .info { /*버튼 위치 */
+			/*background: #f44336; 가운데 빨간색*/
+			padding: 3vh 10vw;
+			height: 70vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-flow: column wrap;
+		}
+		.demo-btns p {
+			text-align: center;
+			color: #fff;
+		}
+		.demo-btns .link {
+			font-size: 20px;
+		}
+		.demo-btns .trigger {
+			margin-right: 3px;
+		}
+		.trigger {
+			position: relative;
+			display: inline-block;
+			padding: 1.2rem 2.4rem;
+			color: rgba(0,0,0,0.7);
+			line-height: 1;
+			cursor: pointer;
+			background: #ffebee;
+			box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
+			-webkit-tap-highlight-color: rgba(0,0,0,0);
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+		}
+
+		.trigger:hover {
+			background: #e5d3d6;
+		}
+		.box_bt .box_bt_detail{
+			margin: 0 auto;  /* 취소, 확인 버튼 가운데로 */
+
+		}
+		.box_bt{
+			width: 220px;
+			height: 35px;
+			line-height: 35px;
+		}
+		/* 취소버튼 */
+		.box_bt .bt {
+			width: 100px;
+			height: 35px;
+			float: left;
+			background: #616161;
+			color: white;
+			cursor: pointer;
+			text-align: center;
+
+		}
+
+		.box_bt .bt2 { /* 확인버튼 */
+			float: right;
+			background: #0E3B64;
 		}
 
 	</style>
 </head>
 <body>
-<button onclick="show_pop_detail(true);"></button>
-
+<div class="demo-btns">
+	<div class="info">
+		<button class="trigger" onclick="show_pop_detail(true);">팝업창</button>
+	</div>
+</div>
 
 <!-- 상세품목팝업 -->
 <div class="pop_detail">
@@ -86,6 +164,7 @@
 	var is_show = false;
 
 	function show_pop_detail(is_show, type, point) {
+		console.log(is_show)
 		if(! is_show) {
 			$('.pop_detail').hide();
 			$('body').css('overflow','auto');
@@ -96,7 +175,18 @@
 			selected_type = type;
 		}
 	}
-
+	// 닫기 기능
+	function selectCancle(){
+		var checkbox = $('.cb');
+		for(var i =0; i<checkbox.length; i++){
+			var bool = checkbox[i].checked;
+			if(bool){
+				checkbox[i].checked = false;
+			}
+		}
+		$('.pop_detail').hide();
+		$('body').css('overflow', 'auto');
+	}
 
 
 
